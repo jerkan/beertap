@@ -1,0 +1,19 @@
+App\Domain\Dispenser:
+    type: entity
+    repositoryClass: App\Infrastructure\Persistence\Repository\MysqlDispenserRepository
+    table: dispensers
+    schema: public
+    id:
+        id:
+            type: string
+    fields:
+        name:
+            type: string
+        flowVolume:
+            type: float
+        openedAt:
+            type: datetime
+            nullable: true
+        closedAt:
+            type: datetime
+            nullable: true
