@@ -1,0 +1,36 @@
+version: '3'
+services:
+    app:
+        build:
+            args:
+                user: ${USER}
+                uid: ${UID}
+            context: ${PWD}
+            dockerfile: .docker/apache/Dockerfile
+        ports:
+            - "8000:80"
+        volumes:
+            - .:/var/www/html
+        env_file:
+            - .env.local
+        depends_on:
+            - mysql
+
+    mysql:
+        image: mysql:5.7
+        env_file:
+            - .env.local
+        ports:
+            - 3306:3306
+        volumes:
+            - beertap-mysql:/var/lib/mysql
+
+    adminer:
+        image: adminer
+        ports:
+            - 8080:8080
+        depends_on:
+            - mysql
+
+volumes:
+    beertap-mysql:

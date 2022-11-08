@@ -69,3 +69,37 @@ Remember that **there is no countdown**, so take your time and implement a solut
   <br><br>
   Made with ❤️ by <a href="https://rviewer.io">Rviewer</a>
 </p>
+
+
+### Prerequisites
+
+Docker
+
+
+### Installing
+
+A step by step series of examples that tell you how to get a development env running
+
+Create local environment file `.env.local` from the `.env` template file.
+
+```
+make install
+```
+
+Start docker containers
+
+```
+make start
+```
+
+Stop docker containers
+
+```
+make stop
+```
+
+## Running the tests
+
+```
+make test
+```
