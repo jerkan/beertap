@@ -6,7 +6,7 @@ start:
 	docker-compose --env-file .env.local up -d
 
 test:
-	docker-compose exec app php ./vendor/bin/phpunit
+	docker-compose exec app php ./vendor/bin/simple-phpunit
 
 cache-clear:
 	docker-compose exec app php bin/console cache:clear
