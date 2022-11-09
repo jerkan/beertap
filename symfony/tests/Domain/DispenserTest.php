@@ -25,4 +25,31 @@ class DispenserTest extends TestCase
         $this->assertSame($name, $beertap->name());
         $this->assertSame($flowVolume, $beertap->flowVolume());
     }
+
+    /** @test */
+    public function it_should_open_properly()
+    {
+        $dispenser = (new DispenserCreator())->build();
+
+        $openedAt = new \DateTime();
+        $dispenser->open($openedAt);
+
+        $this->assertEquals($openedAt, $dispenser->openedAt());
+        $this->assertNull($dispenser->closedAt());
+    }
+
+    /** @test */
+    public function it_should_close_properly()
+    {
+        $dispenser = (new DispenserCreator())->build();
+
+        $openedAt = new \DateTime('-10 seconds');
+        $dispenser->open($openedAt);
+
+        $closedAt = new \DateTime('now');
+        $dispenser->close($closedAt);
+
+        $this->assertEquals($openedAt, $dispenser->openedAt());
+        $this->assertEquals($closedAt, $dispenser->closedAt());
+    }
 }

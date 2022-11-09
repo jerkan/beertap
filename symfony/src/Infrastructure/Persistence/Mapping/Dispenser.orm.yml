@@ -2,7 +2,6 @@ App\Domain\Dispenser:
     type: entity
     repositoryClass: App\Infrastructure\Persistence\Repository\MysqlDispenserRepository
     table: dispensers
-    schema: public
     id:
         id:
             type: string

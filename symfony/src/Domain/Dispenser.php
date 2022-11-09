@@ -41,4 +41,13 @@ class Dispenser
     public function closedAt(): ?DateTime {
         return $this->closedAt;
     }
+
+    public function open(DateTime $now): void {
+        $this->openedAt = $now;
+        $this->closedAt = null;
+    }
+ 
+    public function close(DateTime $now): void {
+        $this->closedAt = $now;
+    }   
 }
