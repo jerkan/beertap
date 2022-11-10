@@ -1,0 +1,17 @@
+App\Domain\DispenserUsage:
+    type: entity
+    repositoryClass: App\Infrastructure\Persistence\Repository\MysqlDispenserRepository
+    table: dispenser_usages
+    id:
+        id:
+            type: string
+        openedAt:
+            type: datetime_key
+    fields:
+        flowVolume:
+            type: float
+        costPerUnit:
+            type: float
+        closedAt:
+            type: datetime
+            nullable: true

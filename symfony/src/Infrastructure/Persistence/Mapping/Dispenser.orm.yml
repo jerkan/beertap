@@ -10,9 +10,3 @@ App\Domain\Dispenser:
             type: string
         flowVolume:
             type: float
-        openedAt:
-            type: datetime
-            nullable: true
-        closedAt:
-            type: datetime
-            nullable: true
