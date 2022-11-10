@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\UI\API;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\HttpFoundation\Request;
 
 class CreateDispenserControllerTest extends WebTestCase
 {
@@ -15,7 +16,7 @@ class CreateDispenserControllerTest extends WebTestCase
 
         $flowVolume = 1.5;
         $body = json_encode(['flow_volume' => $flowVolume]);
-        $client->request('POST', '/api/dispenser', [], [], [], $body);
+        $client->request(Request::METHOD_POST, '/api/dispenser', [], [], [], $body);
 
         $this->assertResponseIsSuccessful();
 
@@ -23,5 +24,4 @@ class CreateDispenserControllerTest extends WebTestCase
         $this->assertArrayHasKey('id', $responseData);
         $this->assertSame($flowVolume, $responseData['flow_volume']);
     }
-
 }

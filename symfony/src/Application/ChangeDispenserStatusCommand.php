@@ -32,6 +32,16 @@ class ChangeDispenserStatusCommand
         return $this->status;
     }
 
+    public function isStatusOpen(): bool
+    {
+        return $this->status === 'open';
+    }
+
+    public function isStatusClose(): bool
+    {
+        return $this->status === 'close';
+    }
+
     public function updatedAt(): DateTime
     {
         return $this->updatedAt;

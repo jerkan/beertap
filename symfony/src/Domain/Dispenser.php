@@ -13,13 +13,18 @@ class Dispenser
     private ?DateTime $openedAt = null;
     private ?DateTime $closedAt = null;
 
-    public function __construct(string $id, string $name, float $flowVolume) {
+    public function __construct(
+        string $id,
+        string $name,
+        float $flowVolume,
+        ?DateTime $closedAt = null
+    ) {
         $this->id = $id;
         $this->name = $name;
         $this->flowVolume = $flowVolume;
 
         $this->openedAt = null;
-        $this->closedAt = null;
+        $this->closedAt = $closedAt ?? new DateTime();
     }
 
     public function id(): string {
@@ -42,12 +47,20 @@ class Dispenser
         return $this->closedAt;
     }
 
-    public function open(DateTime $now): void {
+    /** @throws DispenserAlreadyOpenedException */
+    public function open(DateTime $now): void
+    {
+        if (!is_null($this->openedAt)) {
+            throw DispenserAlreadyOpenedException::ofId($this->id);
+        }
+
         $this->openedAt = $now;
         $this->closedAt = null;
     }
  
-    public function close(DateTime $now): void {
+    public function close(DateTime $now): void
+    {
+        $this->openedAt = null;
         $this->closedAt = $now;
     }   
 }

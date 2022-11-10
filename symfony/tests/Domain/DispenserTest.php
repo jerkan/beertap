@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Domain;
 
 use App\Domain\Dispenser;
+use App\Domain\DispenserAlreadyOpenedException;
 use Faker\Factory;
 use PHPUnit\Framework\TestCase;
 
@@ -17,7 +18,7 @@ class DispenserTest extends TestCase
 
         $id = $faker->uuid;
         $name = $faker->name;
-        $flowVolume = $faker->randomFloat;
+        $flowVolume = $faker->randomFloat();
 
         $beertap = new Dispenser($id, $name, $flowVolume);
 
@@ -49,7 +50,18 @@ class DispenserTest extends TestCase
         $closedAt = new \DateTime('now');
         $dispenser->close($closedAt);
 
-        $this->assertEquals($openedAt, $dispenser->openedAt());
+        $this->assertNull($dispenser->openedAt());
         $this->assertEquals($closedAt, $dispenser->closedAt());
     }
+
+    /** @test */
+    public function it_should_throw_attempting_to_open_an_opened_dispenser()
+    {
+        $this->expectException(DispenserAlreadyOpenedException::class);
+
+        $dispenser = (new DispenserCreator())->build();
+        $dispenser->open(new \DateTime());
+        $dispenser->open(new \DateTime());
+    }
+
 }
