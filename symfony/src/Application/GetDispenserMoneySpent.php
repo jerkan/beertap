@@ -5,38 +5,49 @@ declare(strict_types=1);
 namespace App\Application;
 
 use App\Domain\DispenserNotFoundException;
-use App\Domain\DispenserRepository;
+use App\Domain\DispenserUsage;
+use App\Domain\DispenserUsageRepository;
+use App\Domain\Service\DispenserFinder;
 
 class GetDispenserMoneySpent
 {
-    private DispenserRepository $repository;
-    private float $dispenserCostPerUnit;
+    private DispenserFinder $dispenserFinder;
+    private DispenserUsageRepository $dispenserUsageRepository;
 
     public function __construct(
-        DispenserRepository $repository,
-        float $dispenserCostPerUnit
+        DispenserFinder $dispenserFinder,
+        DispenserUsageRepository $dispenserUsageRepository
     ) {
-        $this->repository = $repository;
-        $this->dispenserCostPerUnit = $dispenserCostPerUnit;
+        $this->dispenserFinder = $dispenserFinder;
+        $this->dispenserUsageRepository = $dispenserUsageRepository;
     }
 
-    /**
-     * @throws DispenserNotFoundException
-     */
+    /** @throws DispenserNotFoundException */
     public function __invoke(GetDispenserMoneySpentCommand $command): GetDispenserMoneySpentResultDto
     {
-        $dispenser = $this->repository->findById($command->id());
+        $this->ensureDispenserExists($command);
 
-        if (is_null($dispenser)) {
-            throw DispenserNotFoundException::ofId($command->id());
+        $dispenserUsages = $this->dispenserUsageRepository->fetchById($command->id());
+
+        $resultDto = new GetDispenserMoneySpentResultDto();
+
+        /** @var DispenserUsage $dispenserUsage */
+        foreach ($dispenserUsages as $dispenserUsage) {
+            $resultDto->addUsage(new GetDispenserMoneySpentResultDtoEntry(
+                $dispenserUsage->flowVolume(),
+                $dispenserUsage->costPerUnit(),
+                $dispenserUsage->totalSpent(new \DateTime()),
+                $dispenserUsage->openedAt(),
+                $dispenserUsage->closedAt()
+            ));
         }
 
-        return new GetDispenserMoneySpentResultDto(
-            $dispenser->flowVolume(),
-            $this->dispenserCostPerUnit,
-            $dispenser->totalSpent($this->dispenserCostPerUnit, $command->now()),
-            $dispenser->openedAt(),
-            $dispenser->closedAt()
-        );
+        return $resultDto;
+    }
+
+    /** @throws DispenserNotFoundException */
+    protected function ensureDispenserExists(GetDispenserMoneySpentCommand $command): void
+    {
+        $this->dispenserFinder->find($command->id());
     }
 }

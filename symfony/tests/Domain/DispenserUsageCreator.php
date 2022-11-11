@@ -56,7 +56,7 @@ class DispenserUsageCreator
         $closedAt = $this->closedAt;
 
         return new DispenserUsage(
-            $id,
+            (string)$id,
             DateTimeKey::fromDateTime($openedAt),
             $costPerUnit,
             $flowVolume,

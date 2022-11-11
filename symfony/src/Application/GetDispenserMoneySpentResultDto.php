@@ -6,48 +6,23 @@ namespace App\Application;
 
 class GetDispenserMoneySpentResultDto
 {
-    private float $flowVolume;
-    private float $costPerUnit;
-    private float $totalSpent;
-    private \DateTime $openedAt;
-    private ?\DateTime $closedAt;
+    /** @var GetDispenserMoneySpentResultDtoEntry[] */
+    private array $usages;
+    private float $totalAmount = 0;
 
-    public function __construct(
-        float $flowVolume,
-        float $costPerUnit,
-        float $totalSpent,
-        \DateTime $openedAt,
-        ?\DateTime $closedAt = null
-    ) {
-        $this->flowVolume = $flowVolume;
-        $this->costPerUnit = $costPerUnit;
-        $this->totalSpent = $totalSpent;
-        $this->openedAt = $openedAt;
-        $this->closedAt = $closedAt;
+    public function addUsage(GetDispenserMoneySpentResultDtoEntry $entry): void
+    {
+        $this->usages[] = $entry;
+        $this->totalAmount += $entry->totalSpent();
     }
 
-    public function flowVolume(): float
+    public function usages(): array
     {
-        return $this->flowVolume;
+        return $this->usages;
     }
 
-    public function costPerUnit(): float
+    public function totalAmount(): float
     {
-        return $this->costPerUnit;
-    }
-
-    public function totalSpent(): float
-    {
-        return $this->totalSpent;
-    }
-
-    public function openedAt(): \DateTime
-    {
-        return $this->openedAt;
-    }
-
-    public function closedAt(): ?\DateTime
-    {
-        return $this->closedAt;
+        return $this->totalAmount;
     }
 }

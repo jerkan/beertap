@@ -56,4 +56,11 @@ class DispenserUsage
         $this->closedAt = $closedAt;
         return $this;
     }
+
+    public function totalSpent(\DateTime $now): float
+    {
+        $secondsPassed = $this->openedAt->diff($now)->s;
+
+        return $this->flowVolume * $this->costPerUnit * $secondsPassed;
+    }
 }
