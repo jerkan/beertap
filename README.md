@@ -98,8 +98,37 @@ Stop docker containers
 make stop
 ```
 
-## Running the tests
+### Running the tests
 
 ```
 make test
+```
+
+## Using the application
+
+Create a dispenser
+
+```
+POST localhost:8000/api/dispenser
+
+{
+    'flow_volume': 0.064
+}
+```
+
+Change dispenser status
+
+```
+PUT localhost:8000/api/dispenser/{id}/status
+
+{
+    'status': open or close,
+    'updated_at': '2022-01-01T02:00:00Z'
+}
+```
+
+Get dispenser money spent (total amount and by usage)
+
+```
+GET localhost:8000/api/dispenser/{id}/spending
 ```
