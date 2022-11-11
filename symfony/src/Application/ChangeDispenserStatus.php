@@ -29,9 +29,13 @@ class ChangeDispenserStatus
     public function __invoke(ChangeDispenserStatusCommand $command): void
     {
         if ($command->isStatusOpen()) {
-            $this->openDispenser->__invoke(new OpenDispenserCommand($command->id()));
+            $this->openDispenser->__invoke(
+                new OpenDispenserCommand($command->id(), $command->updatedAt())
+            );
         } elseif ($command->isStatusClose()) {
-            $this->closeDispenser->__invoke(new CloseDispenserCommand($command->id()));
+            $this->closeDispenser->__invoke(
+                new CloseDispenserCommand($command->id(), $command->updatedAt())
+            );
         }
     }
 }

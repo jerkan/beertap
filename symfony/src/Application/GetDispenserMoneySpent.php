@@ -36,7 +36,7 @@ class GetDispenserMoneySpent
             $resultDto->addUsage(new GetDispenserMoneySpentResultDtoEntry(
                 $dispenserUsage->flowVolume(),
                 $dispenserUsage->costPerUnit(),
-                $dispenserUsage->totalSpent(new \DateTime()),
+                $dispenserUsage->totalSpent($command->now()),
                 $dispenserUsage->openedAt(),
                 $dispenserUsage->closedAt()
             ));
